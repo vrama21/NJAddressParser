@@ -6,32 +6,34 @@ TODO: Create 'City'.csv files for each city to parse faster
 import csv
 import pandas as pd
 import numpy as np
-import collections
+from collections import OrderedDict
 
 
 class Main:
 
     def __init__(self, *args):
-        # self.zip_codes = collections.OrderedDict(
-        #     {'Pleasantville': '08232',
-        #       'Absecon': '08201',
-        #       'Egg Harbor Township': '08234',
-        #       'Galloway': '08205',
-        #       'Northfield': '08225'
-        #     })
+        self.zip_dict = OrderedDict([
+            ('08232', 'Pleasantville'),
+            ('08234', 'Egg Harbor Township'),
+            ('08201', 'Absecon'),
+            ('08205', 'Galloway'),
+            ('08225', 'Northfield')])
 
-        self.zip_codes = ['08232', '08201', '08205', '08234', '08225']
+        self.zip_code_keys = list(self.zip_dict.keys())
+        self.zip_code_values = list(self.zip_dict.values())
+
+        print(self.zip_code_keys)
+        print(self.zip_code_values)
+
         self.num = []
         self.addr = []
         self.city = []
         self.zips = []
 
-        # self.zip_list = list(self.zip_codes)
-        self.parse_statewide(str(self.zip_codes[0]), *args)
-        # self.parse_statewide(iter(self.zip_codes.values()[0]))
+        self.parse_statewide(*self.zip_code_keys, *args)
 
     def parse_statewide(self, zip_code, *args):
-        print('Parsing statewide.csv ...')
+        print('Parsing statewide.csv with zip code {}...'.format(zip_code))
 
         with open('statewide.csv', 'r') as csvfile:
             readcsv = csv.reader(csvfile, delimiter=',')
