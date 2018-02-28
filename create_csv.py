@@ -67,22 +67,14 @@ class CreateCSV:
         # df.sort_values('Address', inplace=True)
         # pd.set_option('display.max_rows', len(self.addr))
 
-        for _city in self.zip_dict.values():
-            if os.path.exists(_city):
-                os.remove(_city)
+        for existing_file in self.zip_code_values:
+            if os.path.exists(existing_file + '.csv'):
+                os.remove(existing_file + '.csv')
 
-            for _zip_match in self.zip_dict.keys():
-                path = open(_city + '.csv', 'w')
-                match = df['Zip Code'] == _zip_match
-                match.to_csv(path, index=False)
-
-        # for _city in self.zip_code_values:
-        #     if os.path.exists(_city):
-        #         os.remove(_city)
-        #
-        #     for _zip in self.zip_code_keys:
-        #         path = open(_city + '.csv', 'w')
-        #         df.to_csv(path, index=False)
+        for _zip, _city in self.zip_dict.items():
+            write_path = open(_city + '.csv', 'w')
+            df_by_city = df.loc[df['Zip Code'] == _zip]
+            df_by_city.to_csv(write_path, index=False)
 
 
 if __name__ == '__main__':
