@@ -1,7 +1,3 @@
-"""
-TODO: Create 'City'.csv files for each city to parse faster
-"""
-
 import os
 import csv
 import pandas as pd
@@ -19,15 +15,12 @@ class CreateCSV:
             ("08205", 'Galloway'),
             ("08225", 'Northfield')])
 
-        self.zip_code_keys = list(self.zip_dict.keys())
-        self.zip_code_values = list(self.zip_dict.values())
-
         self.nums = []
         self.addr = []
         self.city = []
         self.zips = []
 
-        self.parse_statewide(*self.zip_code_keys)
+        self.parse_statewide(*self.zip_dict.keys())
 
     def parse_statewide(self, *args):
         print("Function 'parse_statewide' args = {}".format(args))
@@ -50,31 +43,45 @@ class CreateCSV:
                         self.zips.append(zips_column)
 
         print('Parsing complete')
-        print('Writing {} file...'.format(self.zip_code_values))
 
         self.create_dataframe()
 
     def create_dataframe(self):
-        df = pd.DataFrame({'Address': self.nums,
-                           'Street': self.addr,
-                           'City': self.city,
-                           'Zip Code': self.zips})
+        d = {'Address': self.nums,
+             'Street': self.addr,
+             'City': self.city,
+             'Zip Code': self.zips}
+
+        df = pd.DataFrame(data=d)
 
         # Remove rows with empty City string
         df['City'].replace('', np.nan, inplace=True)
         df.dropna(subset=['City'], inplace=True)
 
-        # df.sort_values('Address', inplace=True)
-        # pd.set_option('display.max_rows', len(self.addr))
+        self.delete_existing()
 
-        for existing_file in self.zip_code_values:
-            if os.path.exists(existing_file + '.csv'):
-                os.remove(existing_file + '.csv')
+        cur_dir = os.getcwd()
+        csv_dir = cur_dir + '\CSV'
+        create_csv_dir = os.path.join(cur_dir, r'CSV')
+        if not os.path.exists(create_csv_dir):
+            os.makedirs(create_csv_dir)
 
+        # df.style.set_properties(**{'text align': 'right'})
+
+        print('Writing {} into CSV files...'.format(self.zip_dict.values()))
+
+        os.chdir(csv_dir)
         for _zip, _city in self.zip_dict.items():
             write_path = open(_city + '.csv', 'w')
             df_by_city = df.loc[df['Zip Code'] == _zip]
             df_by_city.to_csv(write_path, index=False)
+
+    def delete_existing(self):
+        print('Deleting any pre-exisiting CSV Files...')
+
+        for existing_file in self.zip_dict.values():
+            if os.path.exists(existing_file + '.csv'):
+                os.remove(existing_file + '.csv')
 
 
 if __name__ == '__main__':
