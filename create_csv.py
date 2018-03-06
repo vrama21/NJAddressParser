@@ -7,6 +7,9 @@ from collections import OrderedDict
 
 class CreateCSV:
 
+    cur_dir = os.getcwd()
+    csv_dir = cur_dir + '\CSV'
+
     def __init__(self):
         self.zip_dict = OrderedDict([
             ("08232", 'Pleasantville'),
@@ -42,6 +45,9 @@ class CreateCSV:
                         self.city.append(city_column)
                         self.zips.append(zips_column)
 
+        # Clean up extra blank spaces between addresses
+        self.addr = [' '.join(x.split()) for x in self.addr]
+
         print('Parsing complete')
 
         self.create_dataframe()
@@ -52,17 +58,19 @@ class CreateCSV:
              'City': self.city,
              'Zip Code': self.zips}
 
-        df = pd.DataFrame(data=d)
+        self.df = pd.DataFrame(data=d)
 
         # Remove rows with empty City string
-        df['City'].replace('', np.nan, inplace=True)
-        df.dropna(subset=['City'], inplace=True)
+        self.df['City'].replace('', np.nan, inplace=True)
+        self.df.dropna(subset=['City'], inplace=True)
 
         self.delete_existing()
 
-        cur_dir = os.getcwd()
-        csv_dir = cur_dir + '\CSV'
-        create_csv_dir = os.path.join(cur_dir, r'CSV')
+        self.write_csv_files()
+
+    def write_csv_files(self):
+
+        create_csv_dir = os.path.join(CreateCSV.cur_dir, r'CSV')
         if not os.path.exists(create_csv_dir):
             os.makedirs(create_csv_dir)
 
@@ -70,13 +78,14 @@ class CreateCSV:
 
         print('Writing {} into CSV files...'.format(self.zip_dict.values()))
 
-        os.chdir(csv_dir)
+        os.chdir(CreateCSV.csv_dir)
         for _zip, _city in self.zip_dict.items():
             write_path = open(_city + '.csv', 'w')
-            df_by_city = df.loc[df['Zip Code'] == _zip]
+            df_by_city = self.df.loc[self.df['Zip Code'] == _zip]
             df_by_city.to_csv(write_path, index=False)
 
     def delete_existing(self):
+        os.chdir(CreateCSV.csv_dir)
         print('Deleting any pre-exisiting CSV Files...')
 
         for existing_file in self.zip_dict.values():
