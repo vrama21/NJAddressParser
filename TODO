@@ -1,4 +1,7 @@
-- Align Dataframe Text
 - Interactive GUI
-    - Search Functionality
     - Highlight Min\Max
+
+- Search Functionality
+    - Locate Min and Max of Range per Street
+    - Sort Values
+        - Find out how to sort numerically by rightmost

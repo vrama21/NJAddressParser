@@ -2,39 +2,42 @@ import os
 import pandas as pd
 
 
-cur_dir = os.getcwd()
-csv_dir = cur_dir + '\CSV'
-street_list = []
+class Search:
 
+    cur_dir = os.getcwd()
+    csv_dir = cur_dir + '\CSV'
 
-def search(filename, sort=None, maxrows=None):
-    os.chdir(csv_dir)
+    def __init__(self, *args, **kwargs):
+        self.search(*args, **kwargs)
 
-    with open(filename, 'r'):
-        csv = pd.read_csv(filename, sep=',')
-        df = pd.DataFrame(csv)
+    def dataframe(self, filename):
+        os.chdir(self.csv_dir)
 
-        street_list.append(set(df['Street']))
+        with open(filename, 'r'):
+            csv = pd.read_csv(filename, sep=',', converters={'Zip Code': lambda x: str(x)})
+            df = pd.DataFrame(csv, index=None)
+
+        return df
+
+    def search(self, filename, street=None, sort=None, maxrows=None):
+        df = self.dataframe(filename)
 
         if maxrows is True:
             pd.set_option('display.max_rows', len(df.index))
 
         if sort is True:
-            add_data = df['Address']
-            add_data.astype('int')
-            df.sort_values(by='Address', axis=1)
-            # pass
+            df = df.sort_values(by='Address')
 
-        # print(df)
-
-        return df
-
-
-def locate_min_max():
-    for i in street_list:
-        print(i['Address'])
-
+        if street is None:
+            print(df)
+        else:
+            df_street = df[df['Street'].str.contains(street)]
+            print(df_street)
+            min = df_street.groupby('Street')['Address'].transform('min')
+            max = df_street.groupby('Street')['Address'].transform('max')
+            print(min)
+            print(max)
 
 if __name__ == '__main__':
-    search('Pleasantville.csv', maxrows=True)
-    # locate_min_max()
+    Search('Pleasantville.csv', street='Linden Ave', maxrows=True, sort=True)
+
