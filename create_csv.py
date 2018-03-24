@@ -10,16 +10,18 @@ class CreateCSV:
     cur_dir = os.getcwd()
     csv_dir = cur_dir + '\CSV'
 
-    def __init__(self):
-        self.zip_dict = OrderedDict([
-            ("08232", 'Pleasantville'),
-            ("08234", 'Egg Harbor Township'),
-            ("08201", 'Absecon'),
-            ("08205", 'Galloway'),
-            ("08225", 'Northfield')])
+    zip_dict = OrderedDict([
+        ('08232', 'Pleasantville'),
+        ('08234', 'Egg Harbor Township'),
+        ('08201', 'Absecon'),
+        ('08205', 'Galloway'),
+        ('08225', 'Northfield')])
 
-        self.nums = []
+    def __init__(self):
+
         self.addr = []
+        self.unit = []
+        self.strt = []
         self.city = []
         self.zips = []
 
@@ -33,28 +35,30 @@ class CreateCSV:
             readcsv = csv.reader(csvfile, delimiter=',')
 
             for row in readcsv:
-                nums_column = row[2]
-                addr_column = row[3]
+                addr_column = row[2]
+                strt_column = row[3]
                 city_column = row[5]
                 zips_column = row[8]
 
                 for _zip in args:
                     if _zip in zips_column:
-                        self.nums.append(nums_column)
                         self.addr.append(addr_column)
+                        self.strt.append(strt_column)
                         self.city.append(city_column)
                         self.zips.append(zips_column)
 
         # Clean up extra blank spaces between addresses
-        self.addr = [' '.join(x.split()) for x in self.addr]
+        self.strt = [' '.join(x.split()) for x in self.strt]
+        # Remove text after whitespace (e.g. '1/2', 'Unit A')
+        self.addr = [(x.split(' ', 1)[0]) for x in self.addr]
 
         print('Parsing complete')
-
         self.create_dataframe()
 
     def create_dataframe(self):
-        d = {'Address': self.nums,
-             'Street': self.addr,
+        d = {'Address': self.addr,
+             # 'Unit': self.unit
+             'Street': self.strt,
              'City': self.city,
              'Zip Code': self.zips}
 
@@ -64,13 +68,15 @@ class CreateCSV:
         self.df['City'].replace('', np.nan, inplace=True)
         self.df.dropna(subset=['City'], inplace=True)
 
+        print(self.df)
+
         self.delete_existing()
 
         self.write_csv_files()
 
     def write_csv_files(self):
-
-        create_csv_dir = os.path.join(CreateCSV.cur_dir, r'CSV')
+        # Create CSV Folder
+        create_csv_dir = os.path.join(self.cur_dir, r'CSV')
         if not os.path.exists(create_csv_dir):
             os.makedirs(create_csv_dir)
 
@@ -78,7 +84,7 @@ class CreateCSV:
 
         print('Writing {} into CSV files...'.format(self.zip_dict.values()))
 
-        os.chdir(CreateCSV.csv_dir)
+        os.chdir(self.csv_dir)
         for _zip, _city in self.zip_dict.items():
             write_path = open(_city + '.csv', 'w')
             df_by_city = self.df.loc[self.df['Zip Code'] == _zip]

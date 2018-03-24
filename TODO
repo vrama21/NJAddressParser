@@ -2,6 +2,14 @@
     - Highlight Min\Max
 
 - Search Functionality
-    - Locate Min and Max of Range per Street
     - Sort Values
-        - Find out how to sort numerically by rightmost
+        - Ignore rows that contain non-int values (e.g '1/2', 'Unit A')
+            - Temp Fixed by cutting off any characters after a whitespace
+            - Consider adding another 'Unit' column with these values
+
+- Create 2nd Dataframe
+    - Columns: Unique Streets, Count of Addresses per Street, Minumum, Maximum
+        - Unique Streets: Index each different street
+        - Count: Index of total addresses in that specific street
+        - Minumum: Lowest value in address range
+        - Maximum: Highest value in address range
