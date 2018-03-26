@@ -30,8 +30,7 @@ class PandasModel(QtCore.QAbstractTableModel):
 
 
 if __name__ == '__main__':
-    csv = pd.read_csv('Pleasantville.csv', converters={'Zip Code': lambda x: str(x)})
-    df = pd.DataFrame(csv)
+    df = pd.read_csv('Pleasantville.csv', converters={'Zip Code': lambda x: str(x)})
     app = QtWidgets.QApplication(sys.argv)
     view = QtWidgets.QTableView()
     model = PandasModel(df)

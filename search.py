@@ -8,91 +8,113 @@ class Search:
     cur_dir = os.getcwd()
     csv_dir = cur_dir + '\CSV'
 
-    def __init__(self, csv_file, csv_data=None, street=None, maxrows=None):
+    def __init__(self, csv_file, street=None):
 
         self.csv_file = csv_file
         self.street = street
-        self.maxrows = maxrows
-        self.csv_data = csv_data
 
         self.search()
 
-    def dataframe(self):
-        os.chdir(self.csv_dir)
+    def csv_to_df(self):
+        """
+        Parse the selected .csv file and return a dataframe to use
+        for analysis.
+        """
+        csv_file_path = os.path.join(self.csv_dir, self.csv_file)
 
-        with open(self.csv_file, 'r') as _csv_file:
-            self.csv_data = pd.read_csv(_csv_file, sep=',',
-                                        converters={'Zip Code': lambda x: str(x),
-                                                    'Address': lambda x: int(x)
-                                                    })
+        with open(csv_file_path, 'r', encoding='utf-8') as _csv_file:
+            self.df = pd.read_csv(_csv_file, header=0,
+                                  converters={'Zip Code': lambda x: str(x),
+                                              'Address': lambda x: int(x)
+                                              })
 
-            self.df = pd.DataFrame(self.csv_data, index=None)
-            self.df.sort_values(by='Address')
+            pd.set_option('display.max_rows', None)
 
             return self.df
 
     def dataframe_analysis(self):
-        self.street_unique = self.df['Street'].unique()
+        """
+        Using the main dataframe, returns a new dataframe with:
+        (Unique Street, Total Addresses, Min, Max)
+        """
 
-        _data = {'Street': self.street_unique,
-                 'Count': self.address_count(),
-                 # 'Minumum': np.nan,
-                 # 'Maximum': np.nan,
+        _df = self.csv_to_df()
+        _count = self.address_count()
+        _min = self.min_value()
+        _max = self.max_value()
+        _street_unique = _df['Street'].unique()
+
+        _data = {'Street': _street_unique,
+                 'Count': _count,
+                 'Minumum': _min,
+                 'Maximum': _max,
                  }
 
         df2 = pd.DataFrame(_data, index=None)
 
-        df2.sort_values(by='Street')
+        df2.sort_values(by='Street', inplace=True)
 
-        # self.df2['Count'] = self.df2['Street'].apply(self.count)
-
-        pd.set_option('display.max_rows', -1)
-
-        return df2
+        pd.set_option('display.max_rows', None)
+        print(df2)
 
     def address_count(self):
         """
         Grabs main dataframe (self.df) and searches each row in the column ('Street')
         for specific a string and returns the count of each specific address.
         """
+        _df = self.csv_to_df()
+        _street_unique = _df['Street'].unique()
+        _count = []
 
-        for unique in self.street_unique:
-            a = self.df[self.df['Street'].str.contains(unique)]
-            # print('{} has a total of {}'.format(unique, a.count().sum()))
-            return a.count().sum()
+        for unique in _street_unique:
+            a = _df[_df['Street'].str.contains(unique)].count().sum()
+            _count.append(a)
+        return _count
 
-    def min_value(self, dataframe):
-        for addr in self.street_unique:
+    def min_value(self):
+        """
+        Returns the minimum value of a range of addresses
+        """
+
+        _df = self.csv_to_df()
+        _street_unique = _df['Street'].unique()
+        _minimum = []
+
+        for addr in _street_unique:
             loc = self.df[self.df['Street'].str.contains(addr)]
-            minimum = np.nanmin(self.df.iloc[:, 0].values)
+            _min = np.nanmin(loc.iloc[:, 0].values)
+            _minimum.append(_min)
 
-            return minimum
+        return _minimum
 
-    def max_value(self, dataframe):
-        maximum = np.nanmax(dataframe.iloc[:, 0].values)
-        return maximum
+    def max_value(self):
+        """
+        Returns the maximum value of a range of addresses
+        """
+
+        _df = self.csv_to_df()
+        _street_unique = _df['Street'].unique()
+        _minimum = []
+
+        for addr in _street_unique:
+            loc = self.df[self.df['Street'].str.contains(addr)]
+            _max = np.nanmax(loc.iloc[:, 0].values)
+            _minimum.append(_max)
+
+        return _minimum
 
     def search(self):
-        self.dataframe()
         self.dataframe_analysis()
-        self.address_count()
-
-        pd.set_option('display.max_rows', -1)
 
         if self.street is not None:
             df_street = self.df[self.df['Street'].str.contains(self.street)]
             df_street = df_street.sort_values(by='Address')
 
-            # minimum = self.min_value(df_street)
-            # maximum = self.max_value(df_street)
-            #
-            # print('Min for {} is... {}'.format(self.street, minimum))
-            # print('Max for {} is... {}'.format(self.street, maximum))
             print(df_street)
         else:
-            print(self.df)
+            # print(self.df)
+            pass
 
 
 if __name__ == '__main__':
-    Search('Pleasantville.csv')
-
+    result = Search(csv_file='Pleasantville.csv')
