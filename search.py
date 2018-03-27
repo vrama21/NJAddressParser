@@ -13,7 +13,8 @@ class Search:
         self.csv_file = csv_file
         self.street = street
 
-        self.search()
+        # self.search()
+        self.address_count()
 
     def csv_to_df(self):
         """
@@ -42,20 +43,22 @@ class Search:
         _count = self.address_count()
         _min = self.min_value()
         _max = self.max_value()
+
         _street_unique = _df['Street'].unique()
 
         _data = {'Street': _street_unique,
                  'Count': _count,
-                 'Minumum': _min,
+                 'Minimum': _min,
                  'Maximum': _max,
                  }
 
         df2 = pd.DataFrame(_data, index=None)
-
         df2.sort_values(by='Street', inplace=True)
 
+        # Reorder columns
+        cols = ['Street', 'Count', 'Minimum', 'Maximum']
         pd.set_option('display.max_rows', None)
-        print(df2)
+        print(df2[cols])
 
     def address_count(self):
         """
@@ -63,11 +66,12 @@ class Search:
         for specific a string and returns the count of each specific address.
         """
         _df = self.csv_to_df()
-        _street_unique = _df['Street'].unique()
+        _df_street = _df['Street']
+        _street_unique = _df_street.unique()
         _count = []
 
         for unique in _street_unique:
-            a = _df[_df['Street'].str.contains(unique)].count().sum()
+            a = _df_street[_df_street.str.contains(unique)].count().sum()
             _count.append(a)
         return _count
 

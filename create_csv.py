@@ -9,6 +9,7 @@ class CreateCSV:
 
     cur_dir = os.getcwd()
     csv_dir = cur_dir + '\CSV'
+    csv_file_dir = os.path.join(csv_dir, )
 
     zip_dict = OrderedDict([
         ('08232', 'Pleasantville'),
@@ -31,8 +32,10 @@ class CreateCSV:
         print("Function 'parse_statewide' args = {}".format(args))
         print('Parsing statewide.csv with zip code {}...'.format(args))
 
-        with open('statewide.csv', 'r') as csvfile:
-            readcsv = csv.reader(csvfile, delimiter=',')
+        statewide_file_path = self.csv_file_path('statewide.csv')
+
+        with open(statewide_file_path, 'r') as _statewide_csv:
+            readcsv = csv.reader(_statewide_csv, delimiter=',')
 
             for row in readcsv:
                 addr_column = row[2]
@@ -74,6 +77,9 @@ class CreateCSV:
 
         self.write_csv_files()
 
+    def csv_file_path(self, csv_file):
+        return os.path.join(self.csv_dir, csv_file)
+
     def write_csv_files(self):
         # Create CSV Folder
         create_csv_dir = os.path.join(self.cur_dir, r'CSV')
@@ -91,7 +97,7 @@ class CreateCSV:
             df_by_city.to_csv(write_path, index=False)
 
     def delete_existing(self):
-        os.chdir(CreateCSV.csv_dir)
+        os.chdir(self.csv_dir)
         print('Deleting any pre-exisiting CSV Files...')
 
         for existing_file in self.zip_dict.values():

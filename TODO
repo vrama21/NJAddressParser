@@ -1,15 +1,52 @@
 - Interactive GUI
     - Highlight Min\Max
 
-- Search Functionality
-    - Sort Values
-        - Ignore rows that contain non-int values (e.g '1/2', 'Unit A')
-            - Temp Fixed by cutting off any characters after a whitespace
-            - Consider adding another 'Unit' column with these values
+- Create a comparison between csv data and DiamondTouch Database data
 
-- Create 2nd Dataframe
-    - Columns: Unique Streets, Count of Addresses per Street, Minumum, Maximum
-        - Unique Streets: Index each different street
-        - Count: Index of total addresses in that specific street
-        - Minumum: Lowest value in address range
-        - Maximum: Highest value in address range
+- Count is 4x as much as the correct number
+
+- CSV Cleanup:
+    Remove:
+        - Collins
+        - Elm
+        - California & E California
+        - Evans Ave
+        - N Maine Ave
+        - N South Carolina Ave
+        - Newtowne Sq
+        - Orchard Dr
+        - Raveline Dr
+        - Simon Ave
+        - S Indiana Ave
+
+
+    Cleanup:
+        - 1st St = N 1st St
+        - 2nd St = N 2nd St
+        - 3rd St = N 3rd St
+        - 4th St = N 4th St
+
+        - Alden Place = Allen Place
+        - Ansley Ave = Ansley Blvd
+        - Cedar Ct = Cedar Lane
+        - Chestnut??
+        - Grant?
+        - E Redwood to Redwood
+        - Elm = Marple?
+        - Fox Run?
+        - Frankfurt Ct = Frankfort Ct
+        - Glendale Missing?
+        - Hampden Ct?
+        - Larchmont Ave = Larchmont Dr
+        - Lenox Ave = Lennox Ave
+        - MLK = MLK JR Ave
+        - MLK Ave = MLK JR Ave
+        - Maxwell Ave = Maxwell Ln
+        - Montclaire Dr = Montclair Dr
+        - W Pleasant = Pleasant Ave
+        - E Redwood = Redwood Ave
+        - Maple Rd = New Maple Rd
+
+    Missing:
+        - Ingersoll Ave
+        - Penny Ln
