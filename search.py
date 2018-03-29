@@ -12,6 +12,8 @@ class Search:
 
         self.csv_file = csv_file
         self.street = street
+        self.df = self.csv_to_df()
+        self.street_unique= self.df['Street'].unique()
 
         self.search()
 
@@ -38,14 +40,11 @@ class Search:
         (Unique Street, Total Addresses, Min, Max)
         """
 
-        _df = self.csv_to_df()
         _count = self.address_count()
         _min = self.min_value()
         _max = self.max_value()
 
-        _street_unique = _df['Street'].unique()
-
-        _data = {'Street': _street_unique,
+        _data = {'Street': self.street_unique,
                  'Count': _count,
                  'Minimum': _min,
                  'Maximum': _max,
@@ -64,13 +63,10 @@ class Search:
         Grabs main dataframe (self.df) and searches each row in the column ('Street')
         for specific a string and returns the count of each specific address.
         """
-        _df = self.csv_to_df()
-        _df_street = _df['Street']
-        _street_unique = _df_street.unique()
         _count = []
 
-        for unique in _street_unique:
-            a = _df_street[_df_street.str.contains(unique)].count().sum()
+        for unique in self.street_unique:
+            a = self.df['Street'[self.df['Street'].str.contains(unique)].count().sum()]
             _count.append(a)
         return _count
 
@@ -79,11 +75,8 @@ class Search:
         Returns the minimum value of a range of addresses
         """
 
-        _df = self.csv_to_df()
-        _street_unique = _df['Street'].unique()
         _minimum = []
-
-        for addr in _street_unique:
+        for addr in self.street_unique:
             loc = self.df[self.df['Street'].str.contains(addr)]
             _min = np.nanmin(loc.iloc[:, 0].values)
             _minimum.append(_min)
@@ -95,11 +88,9 @@ class Search:
         Returns the maximum value of a range of addresses
         """
 
-        _df = self.csv_to_df()
-        _street_unique = _df['Street'].unique()
         _minimum = []
 
-        for addr in _street_unique:
+        for addr in self.street_unique:
             loc = self.df[self.df['Street'].str.contains(addr)]
             _max = np.nanmax(loc.iloc[:, 0].values)
             _minimum.append(_max)
@@ -120,4 +111,4 @@ class Search:
 
 
 if __name__ == '__main__':
-    result = Search(csv_file='Pleasantville2.csv')
+    result = Search(csv_file='_Pleasantville.csv')
