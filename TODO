@@ -1,52 +1,85 @@
-- Interactive GUI
-    - Highlight Min\Max
+Statewide_Parse:
+    ☐ Strip extra text in the address column (e.g. Unit A, 1/2, etc.) and store it in a Unit Column
 
-- Create a comparison between csv data and DiamondTouch Database data
+Search:
+    Bugs:
+        ✔ Count is 4x the correct amount @done (18-03-27 19:16)
+            - Fix: Count Function was iterating over each column for the count of rows (4 columns)
+GUI:
+    ☐ Highlight Min\Max
 
-- Count is 4x as much as the correct number
+Compare Data:
+    ☐ Create a comparison between csv data and DiamondTouch Database data
+        ☐ Highlight All Discrepencies between the two datasets
 
-- CSV Cleanup:
-    Remove:
-        - Collins
-        - Elm
-        - California & E California
-        - Evans Ave
-        - N Maine Ave
-        - N South Carolina Ave
-        - Newtowne Sq
-        - Orchard Dr
-        - Raveline Dr
-        - Simon Ave
-        - S Indiana Ave
+Write_to_Database:
+    ☐ Copy all data to a Diamondtouch.mdb file with all stored values
+
+Cleanup:
+    ✔ Refactor code into a dynamic class accepting one csv parameter @done (18-03-28 23:07)
+    ✔ Sort the csv file numerically for each unique address @done (18-03-28 01:56)
+        - Works correctly, but there is perhaps a better method of doing it (groupby?)
+        ☐ Keep first header but remove the rest
+    ☐ Dynamically select the dictionary edits matching the city name
+    
 
 
-    Cleanup:
-        - 1st St = N 1st St
-        - 2nd St = N 2nd St
-        - 3rd St = N 3rd St
-        - 4th St = N 4th St
+    Pleasantville:
+        Removals:
+            ☐ California & E California
+            ✔ Evans Ave @done (18-03-27 22:56)
+            ✔ N Maine Ave @done (18-03-27 20:47)
+            ✔ N South Carolina Ave @done (18-03-27 20:47)
+            ✔ Newtowne Sq @done (18-03-27 19:10)
+            ✔ Orchard Dr @done (18-03-27 19:10)
+            ☐ Raveline Dr
+            ✔ Fox Run @done (18-03-27 19:10)
+            ✔ Simon Ave @done (18-03-27 22:56)
+            ✔ S Indiana Ave @done (18-03-27 20:47)
 
-        - Alden Place = Allen Place
-        - Ansley Ave = Ansley Blvd
-        - Cedar Ct = Cedar Lane
-        - Chestnut??
-        - Grant?
-        - E Redwood to Redwood
-        - Elm = Marple?
-        - Fox Run?
-        - Frankfurt Ct = Frankfort Ct
-        - Glendale Missing?
-        - Hampden Ct?
-        - Larchmont Ave = Larchmont Dr
-        - Lenox Ave = Lennox Ave
-        - MLK = MLK JR Ave
-        - MLK Ave = MLK JR Ave
-        - Maxwell Ave = Maxwell Ln
-        - Montclaire Dr = Montclair Dr
-        - W Pleasant = Pleasant Ave
-        - E Redwood = Redwood Ave
-        - Maple Rd = New Maple Rd
+        Edits:
+            ☐ 1st St : N 1st St
+            ☐ 2nd St : N or S 2nd St
+            ☐ 3rd St : N or S 3rd St
+            ☐ 4th St : N or S 4th St
 
-    Missing:
-        - Ingersoll Ave
-        - Penny Ln
+            ✔ 'Alden Pl' : 'Allen Pl' @done (18-03-27 17:22)
+            ✔ 'Ansley Ave' : 'Ansley Blvd' @done (18-03-27 17:25)
+            ✔ 'Cedar Ct' : 'Cedar Ln' @done (18-03-27 17:26)
+            ☐ 'Collins' : 'Collins Ave'
+            ✔ 'E Redwood Ave' : 'Redwood Ave' 0@done (18-03-27 17:26)
+            ☐ 'Elm' : 'Elm Ave'
+            ✔ 'Frankfurt Ct' : 'Frankfort Ct' @done (18-03-27 17:23)
+            ✔ 'Larchmont Ave' : 'Larchmont Dr' @done (18-03-27 17:27)
+            ✔ 'Lenox Ave' : 'Lennox Ave' @done (18-03-27 17:28)
+            ✔ 'Maple Rd' = 'New Maple Rd' @done (18-03-27 17:28)
+            ☐ 'Martin Luther King': 'Martin Luther King Jr Ave',
+            ✔ 'Martin Luther King Ave': 'Martin Luther King Jr Ave', @done (18-03-27 17:31)
+            ✔ 'Maxwell Ave': 'Maxwell Ln', @done (18-03-27 17:30)
+            ✔ 'Montclaire Dr': 'Montclair Dr', @done (18-03-27 17:30)
+            ✔ 'W Pleasant Ave': 'Pleasant Ave', @done (18-03-27 17:30)
+
+            ☐ Chestnut?
+            ☐ Grant?
+            ☐ Elm = Marple?
+            ☐ Hampden Ct?
+
+        Missing:
+            ☐ Ingersoll Ave
+            ☐ Penny Ln
+    Absecon:
+        Removals:
+        Edits:
+        Missing:
+    Egg Harbor Township:
+        Removals:
+        Edits:
+        Missing:
+    Galloway:
+        Removals:
+        Edits:
+        Missing:
+    Northfield:
+        Removals:
+        Edits:
+        Missing:

@@ -5,7 +5,7 @@ import numpy as np
 from collections import OrderedDict
 
 
-class CreateCSV:
+class StatewideParse:
 
     cur_dir = os.getcwd()
     csv_dir = cur_dir + '\CSV'
@@ -26,7 +26,7 @@ class CreateCSV:
         self.city = []
         self.zips = []
 
-        self.parse_statewide(*self.zip_dict.keys())
+        self.main()
 
     def parse_statewide(self, *args):
         print("Function 'parse_statewide' args = {}".format(args))
@@ -50,32 +50,33 @@ class CreateCSV:
                         self.city.append(city_column)
                         self.zips.append(zips_column)
 
-        # Clean up extra blank spaces between addresses
-        self.strt = [' '.join(x.split()) for x in self.strt]
-        # Remove text after whitespace (e.g. '1/2', 'Unit A')
-        self.addr = [(x.split(' ', 1)[0]) for x in self.addr]
-
         print('Parsing complete')
-        self.create_dataframe()
+
+        return
 
     def create_dataframe(self):
         d = {'Address': self.addr,
-             # 'Unit': self.unit
              'Street': self.strt,
              'City': self.city,
              'Zip Code': self.zips}
 
         self.df = pd.DataFrame(data=d)
 
-        # Remove rows with empty City string
+        # Remove rows with empty City string and drop np.nan
         self.df['City'].replace('', np.nan, inplace=True)
         self.df.dropna(subset=['City'], inplace=True)
 
-        print(self.df)
+        # Clean up extra blank spaces between addresses
+        self.df['Street'] = [' '.join(x.split()) for x in self.df['Street']]
+        # Remove text after whitespace (e.g. '1/2', 'Unit A')
+        self.df['Address'] = [(x.split(' ', 1)[0]) for x in self.df['Address']]
+        # Lowercase everything after first letter in the city
+        self.df['City'] = [x[0] + x[1:].lower() for x in self.df['City']]
 
-        self.delete_existing()
+        cols = ['Address', 'Street', 'City', 'Zip Code']
+        self.df = self.df[cols]
 
-        self.write_csv_files()
+        return self.df
 
     def csv_file_path(self, csv_file):
         return os.path.join(self.csv_dir, csv_file)
@@ -85,8 +86,6 @@ class CreateCSV:
         create_csv_dir = os.path.join(self.cur_dir, r'CSV')
         if not os.path.exists(create_csv_dir):
             os.makedirs(create_csv_dir)
-
-        # df.style.set_properties(**{'text align': 'right'})
 
         print('Writing {} into CSV files...'.format(self.zip_dict.values()))
 
@@ -104,7 +103,13 @@ class CreateCSV:
             if os.path.exists(existing_file + '.csv'):
                 os.remove(existing_file + '.csv')
 
+    def main(self):
+        self.parse_statewide(*self.zip_dict.keys())
+        self.create_dataframe()
+        self.delete_existing()
+        self.write_csv_files()
+
 
 if __name__ == '__main__':
-    CreateCSV()
+    StatewideParse()
 

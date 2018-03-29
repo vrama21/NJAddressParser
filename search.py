@@ -13,8 +13,7 @@ class Search:
         self.csv_file = csv_file
         self.street = street
 
-        # self.search()
-        self.address_count()
+        self.search()
 
     def csv_to_df(self):
         """
@@ -121,4 +120,4 @@ class Search:
 
 
 if __name__ == '__main__':
-    result = Search(csv_file='Pleasantville.csv')
+    result = Search(csv_file='Pleasantville2.csv')

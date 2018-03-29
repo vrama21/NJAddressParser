@@ -1,0 +1,78 @@
+{
+  "Prefix": {
+    "North": "N",
+    "South": "S",
+    "East": "E",
+    "West": "W",
+    "Saint": "St"
+  },
+
+  "Suffix":{
+    "Avenue": "Ave",
+    "Boulevard": "Blvd",
+    "Circle": "Cir",
+    "Court": "Ct",
+    "Drive": "Dr",
+    "Lane": "Ln",
+    "Place": "Pl",
+    "Road": "Rd",
+    "Square": "Sq",
+    "Street": "St",
+    "Terrace": "Terr"
+  },
+
+  "Pleasantville": {
+    "Edits": {
+      "1st St": "N 1st St",
+      "Alden Pl": "Allen Pl",
+      "Ansley Ave": "Ansley Blvd",
+      "Cedar Ct": "Cedar Ln",
+      "E Redwood Ave": "Redwood Ave",
+      "Frankfurt Ct": "Frankfort Ct",
+      "Larchmont Ave": "Larchmont Dr",
+      "Lenox Ave": "Lennox Ave",
+      "Maple Rd": "New Maple Rd",
+      "Martin Luther King Ave": "Martin Luther King Jr Ave",
+      "Maxwell Ave": "Maxwell Ln",
+      "Montclaire Dr": "Montclair Dr",
+      "W Pleasant Ave": "Pleasant Ave"
+    },
+    "Removals": [
+      "Evans Ave",
+      "Foxrun Dr",
+      "Orchard Dr",
+      "N Maine Ave",
+      "N South Carolina Ave",
+      "Newtowne Sq",
+      "S Indiana Ave",
+      "Simon Ave"
+    ]
+  },
+
+  "Absecon":{
+    "Edits":{
+      "Shelburn Ave": "Shelburne Ave",
+      "Shelbourne Ave": "Shelburne Ave"
+    },
+    "Removals":[
+      "4th Ave",
+      "8th Ave",
+      "Absecon Dr",
+      "Irelan Ave",
+      "Malabu",
+      "Oyster Bay",
+      "Pleasant Villas",
+      "S English Creek Rd"
+
+    ]
+  },
+
+  "Egg Harbor Township":{
+    "Edits":{
+
+    },
+    "Removals":[
+
+    ]
+  }
+}
