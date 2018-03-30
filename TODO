@@ -1,6 +1,12 @@
 Statewide_Parse:
     ☐ Strip extra text in the address column (e.g. Unit A, 1/2, etc.) and store it in a Unit Column
-
+    ☐ Remove os.chdir 
+        - It is done globally, bad practice
+    ☐ Remove delete_existing function 
+        - Not necessary, writing data will just rewrite the information into the same file
+    ☐ Add Latitude & Longitude to the csv data
+    ☐ Remove csv.reader and use pd.read_csv
+    
 Search:
     Bugs:
         ✔ Count is 4x the correct amount @done (18-03-27 19:16)
@@ -20,8 +26,16 @@ Cleanup:
     ✔ Sort the csv file numerically for each unique address @done (18-03-28 01:56)
         - Works correctly, but there is perhaps a better method of doing it (groupby?)
         ☐ Keep first header but remove the rest
-    ☐ Dynamically select the dictionary edits matching the city name
-    
+    ✔ Create a json file to store all the edits and removals @done (18-03-29 01:08)
+    ✔ Use the prefix json dict to edit the first element in the text @done (18-03-30 01:07)
+    ✔ Use the suffix json dict to edit the last element in the text @done (18-03-30 01:07)
+    ☐ Join the updated prefix and suffix with the rest of the street data
+    ☐ Warning:
+        - F:/Projects/DiamondTouch/Address_Search/cleanup.py:67: SettingWithCopyWarning
+        - A value is trying to be set on a copy of a slice from a DataFrame
+        - See the caveats in the documentation: http://pandas.pydata.org/pandas-docs/stable/indexing.html#indexing-view-versus-copy
+        - a.sort_values('Address', inplace=True)
+    ☐ Round Latitude and Longitude to 7 decimal points    
 
 
     Pleasantville:

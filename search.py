@@ -1,19 +1,17 @@
 import os
 import pandas as pd
 import numpy as np
+from config import *
 
 
 class Search:
-
-    cur_dir = os.getcwd()
-    csv_dir = cur_dir + '\CSV'
 
     def __init__(self, csv_file, street=None):
 
         self.csv_file = csv_file
         self.street = street
         self.df = self.csv_to_df()
-        self.street_unique= self.df['Street'].unique()
+        self.street_unique = self.df['Street'].unique()
 
         self.search()
 
@@ -22,7 +20,7 @@ class Search:
         Parse the selected .csv file and return a dataframe to use
         for analysis.
         """
-        csv_file_path = os.path.join(self.csv_dir, self.csv_file)
+        csv_file_path = os.path.join(csv_dir, self.csv_file)
 
         with open(csv_file_path, 'r', encoding='utf-8') as _csv_file:
             self.df = pd.read_csv(_csv_file, header=0,
@@ -63,12 +61,13 @@ class Search:
         Grabs main dataframe (self.df) and searches each row in the column ('Street')
         for specific a string and returns the count of each specific address.
         """
-        _count = []
+        total = []
 
         for unique in self.street_unique:
-            a = self.df['Street'[self.df['Street'].str.contains(unique)].count().sum()]
-            _count.append(a)
-        return _count
+            _loc = self.df['Street'][self.df['Street'].str.contains(unique)]
+            _count = _loc.count().sum()
+            total.append(_count)
+        return total
 
     def min_value(self):
         """
@@ -76,9 +75,10 @@ class Search:
         """
 
         _minimum = []
+
         for addr in self.street_unique:
-            loc = self.df[self.df['Street'].str.contains(addr)]
-            _min = np.nanmin(loc.iloc[:, 0].values)
+            _loc = self.df[self.df['Street'].str.contains(addr)]
+            _min = np.nanmin(_loc.iloc[:, 0].values)
             _minimum.append(_min)
 
         return _minimum
