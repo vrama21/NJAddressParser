@@ -3,6 +3,7 @@ import pandas as pd
 import re
 import json
 from config import *
+from search import Search
 
 
 class Cleanup:
@@ -11,7 +12,6 @@ class Cleanup:
         self.city = city
         self.df = self.get_df(city)
         self.json_string = self.load_json()
-
         self.edit_df(city)
 
     def csv_dir_write(self, city):
@@ -23,15 +23,11 @@ class Cleanup:
 
         with open(csv_file_path + '.csv', 'r', encoding='utf-8') as _csv_file:
             df = pd.read_csv(_csv_file, converters={'Zip Code': lambda x: str(x),
-                                                    'Address': lambda x: int(x)
+                                                    'Address': lambda x: int(x),
+                                                    'Latitude': lambda x: float(x),
+                                                    'Longitude': lambda x: float(x)
                                                     })
         return df
-
-    def print_df(self):
-        street_group = self.df.groupby('Street')
-        for name, group in street_group:
-            print('\n', name)
-            print(group)
 
     def load_json(self):
         json_file_path = os.path.join(json_dir, 'general_edits.json')
@@ -39,6 +35,13 @@ class Cleanup:
         json_string = json.loads(json_data)
 
         return json_string
+
+
+    def print_df_by_col_group(self, col):
+        col_group = self.df.groupby(col)
+        for name, group in col_group:
+            print('\n', name)
+            print(group)
 
     def edit_df(self, city):
         prefix_dict = self.json_string['Prefix']
@@ -75,20 +78,12 @@ class Cleanup:
             self.df = self.df[self.df['Street'].str.contains(removals) == False]
 
         pd.set_option('display.max_rows', None)
-        self.df.sort_values(['Street'], inplace=True)
 
         write_path = open(self.csv_dir_write(city), 'w')
 
-        street_unique = self.df['Street'].unique()
-
-        # Sort numerically for each sorted address
-        for unique in street_unique:
-            a = self.df[self.df['Street'].str.contains(unique)]
-            a.sort_values('Address', inplace=True)
-            a.to_csv(write_path, index=False)
-
-        print(type(self.df['Latitude']))
-        # self.print_df()
+        self.df.sort_values(['Street', 'Address'], inplace=True)
+        self.df.to_csv(write_path, index=False)
+        self.print_df_by_col_group('Street')
 
         # street_group = df.groupby('Street')
         # for group in street_group:
