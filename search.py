@@ -1,7 +1,7 @@
 import os
 import pandas as pd
 import numpy as np
-from config import *
+from constants import *
 
 
 class Search:
@@ -55,6 +55,13 @@ class Search:
         pd.set_option('display.max_rows', None)
         print(df2[cols])
 
+    def print_df_by_col_group(self, df, col):
+        col_group = df.groupby(col)
+        for name, group in col_group:
+            print('\n', name)
+            print(group)
+        return
+
     def address_count(self, col):
         """
         Grabs main dataframe (self.df) and searches each row in the column ('Street')
@@ -101,4 +108,4 @@ class Search:
 
 
 if __name__ == '__main__':
-    result = Search(csv_file='Pleasantville_Clean.csv')
+    result = Search(csv_file='Northfield_Clean.csv')

@@ -1,41 +1,58 @@
+ ☐ Restructure Code:
+     ☐ Remove hard code and use dynamic function parameters 
+     ☐ Statewide_Parse.py -> Parser.py
+         - Contains all functionality for reading, parsing, and writing csv data
+     ☐ Cleanup.py
+         - Contains all functionality to edit, clean, and remove some of the bad csv data
+     ☐ Search.py 
+         - Contains all functionality for searching the csv data for specific data
+         - Incorporates search data into a GUI
+         
 Statewide_Parse:
-    ☐ Strip extra text in the address column (e.g. Unit A, 1/2, etc.) and store it in a Unit Column
-    ☐ Remove os.chdir 
+    ✔ Strip extra text in the address column (e.g. Unit A, 1/2, etc.) and store it in a Unit Column @done (18-04-01 19:29)
+        - Fix: Iterate through self.addr. Try to append if i[1] exists. Else it appends an empty string
+    ✔ Remove os.chdir @done (18-03-30 21:59)
         - It is done globally, bad practice
-    ☐ Remove delete_existing function 
+    ✔ Remove delete_existing function @done (18-03-30 21:59)
         - Not necessary, writing data will just rewrite the information into the same file
-    ☐ Add Latitude & Longitude to the csv data
+    ✔ Add Latitude & Longitude to the csv data @done (18-03-30 21:59)
     ☐ Remove csv.reader and use pd.read_csv
     
 Search:
     Bugs:
         ✔ Count is 4x the correct amount @done (18-03-27 19:16)
             - Fix: Count Function was iterating over each column for the count of rows (4 columns)
+        ☐ Count is not account for the exact text, it counts the matching text.
+            - (E.g. Weeping Willow Cir - Count = 43, Weeping Willow - Count = 44)
+            - Will need to have the count funtionality to only accept the exact text match
+
 GUI:
     ☐ Highlight Min\Max
 
-Compare Data:
-    ☐ Create a comparison between csv data and DiamondTouch Database data
-        ☐ Highlight All Discrepencies between the two datasets
-
-Write_to_Database:
-    ☐ Copy all data to a Diamondtouch.mdb file with all stored values
-
 Cleanup:
+    ☐ Remove the elem varables and just use self.df['Street'].str.replace(r'(regex)'.format(key), value)
+    ✔ Check for any duplicate rows and remove them @done (18-04-01 22:38)
+        - Fix: self.df.drop_duplicates(subset=['Address', 'Unit', 'Street'])
+    ✔ Lowercase everything after first letter in City column @done (18-04-01 18:45)
+        - Fix: Simple use of [x.title() for x in self.df['City']]
     ✔ Refactor code into a dynamic class accepting one csv parameter @done (18-03-28 23:07)
     ✔ Sort the csv file numerically for each unique address @done (18-03-28 01:56)
-        - Works correctly, but there is perhaps a better method of doing it (groupby?)
-        ☐ Keep first header but remove the rest
+        ✔ Keep first header but remove the rest @done (18-03-30 21:57)
+        - Fix: Removed the loop to search for each unique. Simpler solution was to use
+        -     df.sort_values(['Street', 'Address'])
     ✔ Create a json file to store all the edits and removals @done (18-03-29 01:08)
     ✔ Use the prefix json dict to edit the first element in the text @done (18-03-30 01:07)
     ✔ Use the suffix json dict to edit the last element in the text @done (18-03-30 01:07)
-    ☐ Join the updated prefix and suffix with the rest of the street data
+    ✔ Join the updated prefix and suffix with the rest of the street data @done (18-03-30 17:52)
+        - May need a change. Re.sub may be the better solution in selecting the proper text without splitting
+        -     Re.sub will fix cases that dont fit the criteria of the above edits
     ☐ Warning:
         - F:/Projects/DiamondTouch/Address_Search/cleanup.py:67: SettingWithCopyWarning
-        - A value is trying to be set on a copy of a slice from a DataFrame
-        - See the caveats in the documentation: http://pandas.pydata.org/pandas-docs/stable/indexing.html#indexing-view-versus-copy
-        - a.sort_values('Address', inplace=True)
-    ☐ Round Latitude and Longitude to 7 decimal points    
+        -     A value is trying to be set on a copy of a slice from a DataFrame
+        -     See the caveats in the documentation: http://pandas.pydata.org/pandas-docs/stable/indexing.html#indexing-view-versus-copy
+        -     a.sort_values('Address', inplace=True)
+    ✔ Round Latitude and Longitude to 7 decimal points @done (18-03-30 18:00)  
+        - Fix: Convert each to a float when creating the dataframe
 
 
     Pleasantville:
@@ -57,21 +74,21 @@ Cleanup:
             ☐ 3rd St : N or S 3rd St
             ☐ 4th St : N or S 4th St
 
-            ✔ 'Alden Pl' : 'Allen Pl' @done (18-03-27 17:22)
-            ✔ 'Ansley Ave' : 'Ansley Blvd' @done (18-03-27 17:25)
-            ✔ 'Cedar Ct' : 'Cedar Ln' @done (18-03-27 17:26)
-            ☐ 'Collins' : 'Collins Ave'
-            ✔ 'E Redwood Ave' : 'Redwood Ave' 0@done (18-03-27 17:26)
-            ☐ 'Elm' : 'Elm Ave'
-            ✔ 'Frankfurt Ct' : 'Frankfort Ct' @done (18-03-27 17:23)
-            ✔ 'Larchmont Ave' : 'Larchmont Dr' @done (18-03-27 17:27)
-            ✔ 'Lenox Ave' : 'Lennox Ave' @done (18-03-27 17:28)
-            ✔ 'Maple Rd' = 'New Maple Rd' @done (18-03-27 17:28)
-            ☐ 'Martin Luther King': 'Martin Luther King Jr Ave',
-            ✔ 'Martin Luther King Ave': 'Martin Luther King Jr Ave', @done (18-03-27 17:31)
-            ✔ 'Maxwell Ave': 'Maxwell Ln', @done (18-03-27 17:30)
-            ✔ 'Montclaire Dr': 'Montclair Dr', @done (18-03-27 17:30)
-            ✔ 'W Pleasant Ave': 'Pleasant Ave', @done (18-03-27 17:30)
+            ✔ "Alden Pl" : "Allen Pl" @done (18-03-27 17:22)
+            ✔ "Ansley Ave" : "Ansley Blvd" @done (18-03-27 17:25)
+            ✔ "Cedar Ct" : "Cedar Ln" @done (18-03-27 17:26)
+            ✔ "Collins" : "Collins Ave" @done (18-04-03 02:16)
+            ✔ "E Redwood Ave" : "Redwood Ave" 0@done (18-03-27 17:26)
+            ✔ "Elm" : "Elm Ave" @done (18-04-03 02:15)
+            ✔ "Frankfurt Ct" : "Frankfort Ct" @done (18-03-27 17:23)
+            ✔ "Larchmont Ave" : "Larchmont Dr" @done (18-03-27 17:27)
+            ✔ "Lenox Ave" : "Lennox Ave" @done (18-03-27 17:28)
+            ✔ "Maple Rd" = "New Maple Rd" @done (18-03-27 17:28)
+            ✔ "Martin Luther King": "Martin Luther King Jr Ave", @done (18-04-03 02:15)
+            ✔ "Martin Luther King Ave": "Martin Luther King Jr Ave", @done (18-03-27 17:31)
+            ✔ "Maxwell Ave": "Maxwell Ln", @done (18-03-27 17:30)
+            ✔ "Montclaire Dr": "Montclair Dr", @done (18-03-27 17:30)
+            ✔ "W Pleasant Ave": "Pleasant Ave", @done (18-03-27 17:30)
 
             ☐ Chestnut?
             ☐ Grant?
@@ -79,7 +96,9 @@ Cleanup:
             ☐ Hampden Ct?
 
         Missing:
+            ☐ Dunlin Ln
             ☐ Ingersoll Ave
+            ☐ Mallard Ln
             ☐ Penny Ln
     Absecon:
         Removals:
@@ -88,10 +107,20 @@ Cleanup:
     Egg Harbor Township:
         Removals:
         Edits:
+            ☐ "Aberdeen Aberdeen": "Aberdeen Cir"
+            ☐ "Steelmanville Steelmanville": "Steelmanville Rd"
+            ☐ "Weeping Willow" = "Weeping Willow Dr"
         Missing:
     Galloway:
         Removals:
         Edits:
+            ✔ "Poplar Avenue South": "S Poplar Ave", @done (18-04-02 20:46)
+            ✔ "Quince Avenue South": "S Quince Ave", @done (18-04-02 20:46)
+            ✔ "Redwood Avenue South": "Redwood Ave", @done (18-04-02 20:46)
+            ✔ "Spruce Avenue South": "Spruce Ave", @done (18-04-02 20:46)
+            ✔ "Timberlane Timberlane": "Timber Ln", @done (18-04-02 20:46)
+            ✔ "Tulip Avenue South": "Tulip Ave", @done (18-04-02 20:46)
+            ✔ "Upas Avenue South": "Upas Ave" @done (18-04-02 20:46)
         Missing:
     Northfield:
         Removals:

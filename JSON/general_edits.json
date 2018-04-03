@@ -22,6 +22,7 @@
     "Square": "Sq",
     "Street": "St",
     "Terrace": "Ter",
+    "Trail": "Trl",
     "Turnpike": "Tpke"
   },
 
@@ -31,11 +32,13 @@
       "Alden Pl": "Allen Pl",
       "Ansley Ave": "Ansley Blvd",
       "Cedar Ct": "Cedar Ln",
-      "E Redwood Ave": "Redwood Ave",
+      "Collins Collins": "Collins Ave",
+      "Elm Elm": "Elm Ave",
       "Frankfurt Ct": "Frankfort Ct",
       "Larchmont Ave": "Larchmont Dr",
       "Lenox Ave": "Lennox Ave",
       "Maple Rd": "New Maple Rd",
+      "Martin Luther King": "Martin Luther King Jr Ave",
       "Martin Luther King Ave": "Martin Luther King Jr Ave",
       "Maxwell Ave": "Maxwell Ln",
       "Montclaire Dr": "Montclair Dr",
@@ -56,7 +59,8 @@
   "Absecon":{
     "Edits":{
       "Shelburn Ave": "Shelburne Ave",
-      "Shelbourne Ave": "Shelburne Ave"
+      "Shelbourne Ave": "Shelburne Ave",
+      "Whitehorse Pike": "White Horse Pike"
     },
     "Removals":[
       "4th Ave",
@@ -78,5 +82,29 @@
     "Removals":[
 
     ]
-  }
+  },
+
+  "Galloway":{
+    "Edits":{
+      "Poplar Avenue South": "S Poplar Ave",
+      "Quince Avenue South": "S Quince Ave",
+      "Redwood Avenue South": "Redwood Ave",
+      "Spruce Avenue South": "Spruce Ave",
+      "Timberlane Timberlane": "Timber Ln",
+      "Tulip Avenue South": "Tulip Ave",
+      "Upas Avenue South": "Upas Ave"
+    },
+    "Removals":[
+
+    ]
+  },
+
+  "Northfield":{
+  "Edits":{
+
+  },
+  "Removals":[
+
+  ]
+}
 }

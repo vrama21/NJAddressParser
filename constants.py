@@ -1,9 +1,9 @@
 import os.path
 from collections import OrderedDict
 
-basedir = os.path.dirname(os.path.realpath(__file__))
-csv_dir = basedir + '\CSV'
-json_dir = basedir + '\JSON'
+base_dir = os.path.dirname(os.path.realpath(__file__))
+csv_dir = base_dir + '\CSV'
+json_dir = base_dir + '\JSON'
 
 zip_dict = OrderedDict([
     ('08232', 'Pleasantville'),
