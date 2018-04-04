@@ -2,6 +2,7 @@ import os
 import pandas as pd
 import json
 from constants import *
+from search import *
 from time_dec import *
 
 
@@ -10,7 +11,6 @@ class Cleanup:
     def __init__(self, city):
         self.city = city
         self.city_csv = city + '.csv'
-        self.city_clean_csv = city + '_Clean.csv'
 
         self.df = self.get_df(self.city_csv)
 
@@ -31,7 +31,7 @@ class Cleanup:
         self.edit_df()
         self.df.sort_values(['Street', 'Address'], inplace=True)
 
-        csv_write_path = os.path.join(csv_dir, self.city_clean_csv)
+        csv_write_path = os.path.join(csv_clean_dir, self.city_csv)
 
         try:
             write_path = open(csv_write_path, 'w')
@@ -42,13 +42,13 @@ class Cleanup:
 
     def csv_update(self):
         """
-        Updates the clean csv with any changes
+        Updates the clean csv based on any changes made on the clean csv file
         """
 
-        _df = self.get_df(self.city_clean_csv)
+        _df = self.get_df(self.city_csv)
         _df.sort_values(['Street', 'Address'], inplace=True)
 
-        csv_write_path = os.path.join(csv_dir, self.city_clean_csv)
+        csv_write_path = os.path.join(csv_dir, self.city_csv)
 
         try:
             write_path = open(csv_write_path, 'w')
@@ -58,7 +58,7 @@ class Cleanup:
                                   " that program and re-run the search.")
 
     def get_df(self, csv_file):
-        csv_file_path = os.path.join(csv_dir, csv_file)
+        csv_file_path = os.path.join(csv_parsed_dir, csv_file)
 
         with open(csv_file_path,  'r', encoding='utf-8') as _csv_file:
             df = pd.read_csv(_csv_file, converters={'Zip Code': lambda x: str(x),
@@ -76,15 +76,8 @@ class Cleanup:
 
         return json_string
 
-    def print_df_by_col_group(self, col):
-        pd.set_option('display.max_rows', None)
-        col_group = self.df.groupby(col)
-        for name, group in col_group:
-            print('\n', name)
-            print(group)
-
     def edit_df(self):
-
+        # _search = Search(self)
         for key, value in self.prefix_dict.items():
             self.df['Street'] = self.df['Street'].str.replace('^{}\s\s'.format(key), value)
 
@@ -101,7 +94,7 @@ class Cleanup:
 
         self.df.drop_duplicates(subset=['Address', 'Unit', 'Street'], inplace=True)
 
-        # self.print_df_by_col_group('Street')
+        # _search.print_df_by_col_group('Street')
 
     def main(self):
         self.csv_write()

@@ -19,7 +19,7 @@ class Search:
         Parse the selected .csv file and return a dataframe to use
         for analysis.
         """
-        csv_file_path = os.path.join(csv_dir, self.csv_file)
+        csv_file_path = os.path.join(csv_parsed_dir, self.csv_file)
 
         with open(csv_file_path, 'r', encoding='utf-8') as _csv_file:
             self.df = pd.read_csv(_csv_file, header=0,
@@ -55,7 +55,8 @@ class Search:
         pd.set_option('display.max_rows', None)
         print(df2[cols])
 
-    def print_df_by_col_group(self, df, col):
+    def print_df_by_col_group(self, col):
+        df = self.df
         col_group = df.groupby(col)
         for name, group in col_group:
             print('\n', name)
@@ -106,6 +107,5 @@ class Search:
     def search(self):
         self.dataframe_analysis()
 
-
 if __name__ == '__main__':
-    result = Search(csv_file='Northfield_Clean.csv')
+    result = Search(csv_file='Northfield.csv')

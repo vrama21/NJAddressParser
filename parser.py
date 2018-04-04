@@ -25,16 +25,21 @@ class Parser:
         self.zips = []
 
         self.parse_statewide(source_csv, *zip_dict.keys())
-        self.df = self.create_dataframe()
+        self.df = self.csv_to_dataframe()
+        self.write_csv_files(*zip_dict.keys())
 
-        self.main()
-
+    @timefunc
     def parse_statewide(self, source_csv, *args):
-        print("Function 'parse_statewide' args = {}".format(args))
-        print('Parsing statewide.csv with zip code {}...'.format(args))
+        """
+        Selects the main source csv file to parse all the data from and parses through it
+        by specified zip codes to extract specified data.
+        """
 
-        with open(source_csv, 'r') as _source_csv_path:
-            readcsv = csv.reader(_source_csv_path, delimiter=',')
+        print('Parsing {} with these specified arguments {}...'.format(source_csv, args))
+
+        source_csv_path = os.path.join(csv_source_dir, source_csv)
+        with open(source_csv_path, 'r') as source_csv_reader:
+            readcsv = csv.reader(source_csv_reader, delimiter=',')
 
             for row in readcsv:
                 long_column = row[0]
@@ -62,10 +67,9 @@ class Parser:
         self.addr = [''.join(x[0]) for x in self.addr]
 
         print('Parsing complete')
-
         return
 
-    def create_dataframe(self):
+    def csv_to_dataframe(self):
         d = {'Address': self.addr,
              'Unit': self.unit,
              'Street': self.strt,
@@ -84,11 +88,11 @@ class Parser:
 
         return df
 
-    def write_csv_files(self):
-        print('Writing {} into CSV files...'.format(zip_dict.values()))
+    def write_csv_files(self, *args):
+        print('Writing {} into CSV files...'.format(args))
 
         for keys, values in zip_dict.items():
-            csv_file_path = os.path.join(csv_dir, values)
+            csv_file_path = os.path.join(csv_parsed_dir, values)
             write_path = open(csv_file_path + '.csv', 'w')
 
             df_by_city = self.df.loc[self.df['Zip Code'] == keys]
@@ -96,9 +100,6 @@ class Parser:
 
         return
 
-    def main(self):
-        self.write_csv_files()
-
 
 if __name__ == '__main__':
-    Parser(source_csv='statewide.csv')
+    res = Parser(source_csv='statewide.csv')

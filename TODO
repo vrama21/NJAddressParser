@@ -16,7 +16,11 @@ Statewide_Parse:
     ✔ Remove delete_existing function @done (18-03-30 21:59)
         - Not necessary, writing data will just rewrite the information into the same file
     ✔ Add Latitude & Longitude to the csv data @done (18-03-30 21:59)
-    ☐ Remove csv.reader and use pd.read_csv
+    ✔ Remove csv.reader and use pd.read_csv @done (18-04-03 20:56)
+        - Attempted trying this but got a slower parse
+            - csv.reader function results in ~10.5s
+            - pd.read_csv function results in ~13.0s
+    ☐ Timefunc decorator breaks the csv_to_dataframe by not appending any of the data
     
 Search:
     Bugs:
@@ -31,6 +35,7 @@ GUI:
 
 Cleanup:
     ☐ Remove the elem varables and just use self.df['Street'].str.replace(r'(regex)'.format(key), value)
+
     ✔ Check for any duplicate rows and remove them @done (18-04-01 22:38)
         - Fix: self.df.drop_duplicates(subset=['Address', 'Unit', 'Street'])
     ✔ Lowercase everything after first letter in City column @done (18-04-01 18:45)
