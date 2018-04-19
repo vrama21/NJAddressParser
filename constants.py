@@ -6,6 +6,7 @@ csv_dir = base_dir + '\csv'
 csv_source_dir = csv_dir + '\source'
 csv_parsed_dir = csv_dir + '\parsed'
 csv_clean_dir = csv_dir + '\clean'
+csv_updated_dir = csv_dir + r'\updated'
 json_dir = base_dir + '\json'
 
 zip_dict = OrderedDict([

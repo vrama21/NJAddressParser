@@ -4,7 +4,7 @@ from constants import *
 
 def check_path_exists():
     base_path_checks = [csv_dir, json_dir]
-    csv_path_checks = {csv_dir: [csv_source_dir, csv_parsed_dir, csv_clean_dir]}
+    csv_path_checks = {csv_dir: [csv_source_dir, csv_parsed_dir, csv_clean_dir, csv_updated_dir]}
 
     for paths in base_path_checks:
         if not os.path.exists(paths):

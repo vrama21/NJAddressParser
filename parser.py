@@ -8,13 +8,13 @@ from time_dec import *
 """
 Source csv data is gathered from www.OpenAddresses.io
 Parser creates a per-city csv from state-wide or county-wide csv files
-
 """
 
 
 class Parser:
 
     def __init__(self, source_csv=None):
+        self.source_csv = source_csv
 
         self.long = []
         self.lati = []
@@ -23,10 +23,6 @@ class Parser:
         self.strt = []
         self.city = []
         self.zips = []
-
-        self.parse_statewide(source_csv, *zip_dict.keys())
-        self.df = self.csv_to_dataframe()
-        self.write_csv_files(*zip_dict.keys())
 
     @timefunc
     def parse_statewide(self, source_csv, *args):
@@ -58,18 +54,17 @@ class Parser:
                         self.city.append(city_column)
                         self.zips.append(zips_column)
 
-        self.addr = [x.split() for x in self.addr]
-        for i in self.addr:
-            try:
-                self.unit.append(i[1])
-            except IndexError:
-                self.unit.append('')
-        self.addr = [''.join(x[0]) for x in self.addr]
+            self.addr = [x.split() for x in self.addr]
+            for i in self.addr:
+                try:
+                    self.unit.append(i[1])
+                except IndexError:
+                    self.unit.append('')
+            self.addr = [''.join(x[0]) for x in self.addr]
 
-        print('Parsing complete')
-        return
+            print('Parsing complete')
 
-    def csv_to_dataframe(self):
+    def create_statewide_df(self):
         d = {'Address': self.addr,
              'Unit': self.unit,
              'Street': self.strt,
@@ -85,21 +80,26 @@ class Parser:
 
         cols = ['Address', 'Unit', 'Street', 'City', 'Zip Code', 'Latitude', 'Longitude']
         df = df[cols]
-
         return df
 
     def write_csv_files(self, *args):
         print('Writing {} into CSV files...'.format(args))
-
+        _df = self.create_statewide_df()
         for keys, values in zip_dict.items():
             csv_file_path = os.path.join(csv_parsed_dir, values)
             write_path = open(csv_file_path + '.csv', 'w')
 
-            df_by_city = self.df.loc[self.df['Zip Code'] == keys]
+            df_by_city = _df.loc[_df['Zip Code'] == keys]
             df_by_city.to_csv(write_path, index=False)
 
         return
 
+    def run_statewide_parser(self):
+        self.parse_statewide(self.source_csv, *zip_dict.keys())
+        self.write_csv_files(*zip_dict.keys())
 
 if __name__ == '__main__':
-    res = Parser(source_csv='statewide.csv')
+    parser = Parser(source_csv='statewide.csv')
+    parser.run_statewide_parser()
+    # test = parser.parse_statewide('statewide.csv', *zip_dict.keys())
+    # print(test)

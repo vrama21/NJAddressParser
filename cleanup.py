@@ -48,7 +48,7 @@ class Cleanup:
         _df = self.get_df(self.city_csv)
         _df.sort_values(['Street', 'Address'], inplace=True)
 
-        csv_write_path = os.path.join(csv_dir, self.city_csv)
+        csv_write_path = os.path.join(csv_updated_dir, self.city_csv)
 
         try:
             write_path = open(csv_write_path, 'w')
@@ -77,7 +77,6 @@ class Cleanup:
         return json_string
 
     def edit_df(self):
-        # _search = Search(self)
         for key, value in self.prefix_dict.items():
             self.df['Street'] = self.df['Street'].str.replace('^{}\s\s'.format(key), value)
 
@@ -94,7 +93,8 @@ class Cleanup:
 
         self.df.drop_duplicates(subset=['Address', 'Unit', 'Street'], inplace=True)
 
-        # _search.print_df_by_col_group('Street')
+        _search = Search(self)
+        _search.print_df_by_col_group(self.df, 'Street')
 
     def main(self):
         self.csv_write()
